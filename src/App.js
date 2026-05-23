@@ -3,8 +3,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 // ============================================================
 // PHÒNG THÍ NGHIỆM KINH TẾ THỦY LỢI
-// Bài dự thi: "Ứng dụng công nghệ số thiết kế bài giảng 2026"
-// TS. Đào Mộng Anh — ĐH Thủy Lợi
+// Bài dự thi: "Ứng dụng công nghệ số thiết kế bài giảng, bài trình bày khoa học năm 2026"
+// TS. Đào Mộng Anh — trường Đại học Thủy Lợi
 // ============================================================
 
 // LIGHT THEME — gam màu xanh dương đặc trưng TLU
@@ -908,7 +908,7 @@ export default function App() {
             🏆 BÀI DỰ THI HỘI THI "ỨNG DỤNG CÔNG NGHỆ SỐ THIẾT KẾ BÀI GIẢNG, BÀI TRÌNH BÀY KHOA HỌC NĂM 2026"
           </div>
           <div style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>
-            Tác giả: TS. Đào Mộng Anh · Bộ môn Mác-Lênin · Khoa Lý luận chính trị · Hà Nội, 2026
+            Tác giả: TS. Đào Mộng Anh · Bộ môn Mác-Lênin · Khoa Luật và Lý luận chính trị · Hà Nội, 2026
           </div>
         </div>
       </div>
@@ -965,7 +965,7 @@ export default function App() {
           <span style={{ color: COLORS.primary, fontSize: 12, fontWeight: 700 }}>ĐẠI HỌC THỦY LỢI · 1959</span>
         </div>
         <p style={{ color: COLORS.textMuted, fontSize: 11, margin: 0 }}>
-          © 2026 Lớp học số KTCT — Nước & Thủy lợi · TS. Đào Mộng Anh · Bộ môn Mác-Lênin · Khoa Lý luận chính trị · Bài dự thi "Ứng dụng công nghệ số thiết kế bài giảng, bài trình bày khoa học năm 2026"
+          © 2026 Lớp học số KTCT — Nước & Thủy lợi · TS. Đào Mộng Anh · Bộ môn Mác-Lênin · Khoa Luật và Lý luận chính trị · Bài dự thi "Ứng dụng công nghệ số thiết kế bài giảng, bài trình bày khoa học năm 2026"
         </p>
       </div>
     </div>
