@@ -207,7 +207,7 @@ function MarketSimulation() {
           Điều chỉnh các tham số để quan sát quy luật giá trị và cung-cầu vận hành
         </p>
         <div style={{ display: "inline-block", marginTop: 12, padding: "8px 16px", background: COLORS.primaryPale, borderRadius: 20, fontSize: 12, color: COLORS.primary, fontWeight: 600 }}>
-          📐 Công thức C.Mác: <strong>W = c + v + m</strong> · Tham chiếu giá nước bậc thang VN: 7.500đ → 16.000đ/m³
+          📐 Công thức C.Mác: <strong>W = c + v + m</strong> · TGLĐXHCT là 5 giờ
         </div>
       </div>
 
@@ -217,9 +217,9 @@ function MarketSimulation() {
             <h3 style={{ color: COLORS.primary, fontSize: 14, fontWeight: 700, marginTop: 0, marginBottom: 16 }}>
               ⚙️ Tham số sản xuất
             </h3>
-            <Slider label="Thời gian lao động cá biệt (v: lao động sống)" value={laborTime} onChange={setLaborTime} min={1} max={12} unit=" giờ" color={COLORS.supply} />
+            <Slider label="Thời gian lao động cá biệt" value={laborTime} onChange={setLaborTime} min={1} max={12} unit=" giờ" color={COLORS.supply} />
             <Slider label="Năng suất lao động" value={productivity} onChange={setProductivity} min={20} max={300} unit="%" color={COLORS.equilibrium} />
-            <Slider label="Chi phí tư liệu sản xuất (c: nguyên liệu + điện + khấu hao)" value={rawMaterialCost} onChange={setRawMaterialCost} min={1000} max={8000} step={500} unit=" đ" color={COLORS.purple} />
+            <Slider label="Chi phí tư liệu sản xuất" value={rawMaterialCost} onChange={setRawMaterialCost} min={1000} max={8000} step={500} unit=" đ" color={COLORS.purple} />
             
             <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 16, marginTop: 8 }}>
               <h3 style={{ color: COLORS.demand, fontSize: 14, fontWeight: 700, marginTop: 0, marginBottom: 16 }}>
