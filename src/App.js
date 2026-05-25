@@ -3,8 +3,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 // ============================================================
 // PHÒNG THÍ NGHIỆM KINH TẾ THỦY LỢI
-// Bài dự thi: "Ứng dụng công nghệ số thiết kế bài giảng 2026"
-// TS. Đào Mộng Anh — ĐH Thủy Lợi
+// Bài dự thi: "Ứng dụng công nghệ số thiết kế bài giảng, bài trình bày khoa học năm 2026"
+// TS. Đào Mộng Anh — Bộ môn Mác-Lênin, Khoa Luật và Lý luận chính trị, trường Đại học Thủy lợi
 // ============================================================
 
 // LIGHT THEME — gam màu xanh dương đặc trưng TLU
