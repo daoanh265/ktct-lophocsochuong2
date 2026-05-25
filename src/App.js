@@ -3,8 +3,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 // ============================================================
 // PHÒNG THÍ NGHIỆM KINH TẾ THỦY LỢI
-// Bài dự thi: "Ứng dụng công nghệ số thiết kế bài giảng, bài trình bày khoa học năm 2026"
-// TS. Đào Mộng Anh — trường Đại học Thủy Lợi
+// Bài dự thi: "Ứng dụng công nghệ số thiết kế bài giảng 2026"
+// TS. Đào Mộng Anh — ĐH Thủy Lợi
 // ============================================================
 
 // LIGHT THEME — gam màu xanh dương đặc trưng TLU
@@ -167,17 +167,37 @@ function MarketSimulation() {
   const [laborTime, setLaborTime] = useState(5);
   const [productivity, setProductivity] = useState(100);
   const [rawMaterialCost, setRawMaterialCost] = useState(3000);
+  const [surplusValueRate, setSurplusValueRate] = useState(100); // m' (%) — tỷ suất giá trị thặng dư
   const [demand, setDemand] = useState(500);
   const [supply, setSupply] = useState(500);
   const [history, setHistory] = useState([]);
   const [round, setRound] = useState(0);
 
-  const sociallyNecessaryLaborTime = 5;
-  const individualValue = (rawMaterialCost + laborTime * 1000) / productivity * 100;
-  const socialValue = (rawMaterialCost + sociallyNecessaryLaborTime * 1000) / 100 * 100;
+  const sociallyNecessaryLaborTime = 5; // TGLĐXHCT (giờ)
+  const wageRate = 1000;                // đ/giờ — giá trị 1 giờ sức lao động
+
+  // --- CÁ BIỆT (của DN) ---
+  // v cá biệt: lao động sống thực tế, điều chỉnh theo NSLĐ (NSLĐ cao -> v thấp cho 1 đơn vị SP)
+  const v_individual = (laborTime * wageRate) / productivity * 100;
+  // m cá biệt: giá trị thặng dư DN tạo ra (m' áp lên v cá biệt)
+  const m_individual = v_individual * surplusValueRate / 100;
+  // k = c + v: CHI PHÍ cá biệt thực tế DN bỏ ra (KHÔNG bao gồm m)
+  const individualCost = rawMaterialCost + v_individual;
+  // W cá biệt = c + v + m: GIÁ TRỊ cá biệt do lao động cụ thể của DN này tạo ra
+  const individualValue = rawMaterialCost + v_individual + m_individual;
+
+  // --- XÃ HỘI (TGLĐXHCT, NSLĐ trung bình) ---
+  const v_social = sociallyNecessaryLaborTime * wageRate;
+  const m_social = v_social * surplusValueRate / 100;
+  // W xã hội = c + v + m: GIÁ TRỊ hàng hóa do XH thừa nhận
+  const socialValue = rawMaterialCost + v_social + m_social;
+
+  // --- THỊ TRƯỜNG ---
   const supplyDemandRatio = demand / Math.max(supply, 1);
   const marketPrice = socialValue * supplyDemandRatio;
-  const profit = marketPrice - individualValue;
+  // Lợi nhuận thực tế = Giá cả bán − Chi phí cá biệt (k)
+  //   = m bình quân ± lợi nhuận siêu ngạch ± chênh lệch do cung-cầu
+  const profit = marketPrice - individualCost;
 
   const runSimulation = () => {
     const newRound = round + 1;
@@ -191,6 +211,7 @@ function MarketSimulation() {
   const resetSim = () => {
     setHistory([]); setRound(0);
     setLaborTime(5); setProductivity(100); setRawMaterialCost(3000);
+    setSurplusValueRate(100);
     setDemand(500); setSupply(500);
   };
 
@@ -207,7 +228,7 @@ function MarketSimulation() {
           Điều chỉnh các tham số để quan sát quy luật giá trị và cung-cầu vận hành
         </p>
         <div style={{ display: "inline-block", marginTop: 12, padding: "8px 16px", background: COLORS.primaryPale, borderRadius: 20, fontSize: 12, color: COLORS.primary, fontWeight: 600 }}>
-          📐 Công thức C.Mác: <strong>W = c + v + m</strong> · TGLĐXHCT là 5 giờ
+          📐 Công thức C.Mác: <strong>W = c + v + m</strong> · Tham chiếu giá nước bậc thang VN: 7.500đ → 16.000đ/m³
         </div>
       </div>
 
@@ -217,9 +238,10 @@ function MarketSimulation() {
             <h3 style={{ color: COLORS.primary, fontSize: 14, fontWeight: 700, marginTop: 0, marginBottom: 16 }}>
               ⚙️ Tham số sản xuất
             </h3>
-            <Slider label="Thời gian lao động cá biệt" value={laborTime} onChange={setLaborTime} min={1} max={12} unit=" giờ" color={COLORS.supply} />
+            <Slider label="Thời gian lao động cá biệt (v: lao động sống)" value={laborTime} onChange={setLaborTime} min={1} max={12} unit=" giờ" color={COLORS.supply} />
             <Slider label="Năng suất lao động" value={productivity} onChange={setProductivity} min={20} max={300} unit="%" color={COLORS.equilibrium} />
-            <Slider label="Chi phí tư liệu sản xuất" value={rawMaterialCost} onChange={setRawMaterialCost} min={1000} max={8000} step={500} unit=" đ" color={COLORS.purple} />
+            <Slider label="Chi phí tư liệu sản xuất (c: nguyên liệu + điện + khấu hao)" value={rawMaterialCost} onChange={setRawMaterialCost} min={1000} max={8000} step={500} unit=" đ" color={COLORS.purple} />
+            <Slider label="Tỷ suất giá trị thặng dư m' = m/v (sức bóc lột lao động)" value={surplusValueRate} onChange={setSurplusValueRate} min={0} max={300} step={10} unit="%" color={COLORS.gold} />
             
             <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 16, marginTop: 8 }}>
               <h3 style={{ color: COLORS.demand, fontSize: 14, fontWeight: 700, marginTop: 0, marginBottom: 16 }}>
@@ -254,9 +276,12 @@ function MarketSimulation() {
             
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
               <div style={{ background: COLORS.bgAlt, borderRadius: 10, padding: 14, textAlign: "center" }}>
-                <div style={{ color: COLORS.textMuted, fontSize: 10, marginBottom: 4, fontWeight: 600 }}>GIÁ TRỊ (W = c+v+m)</div>
+                <div style={{ color: COLORS.textMuted, fontSize: 10, marginBottom: 4, fontWeight: 600 }}>GIÁ TRỊ XÃ HỘI (W = c+v+m)</div>
                 <div style={{ color: COLORS.gold, fontSize: 20, fontWeight: 800, fontFamily: "'JetBrains Mono', monospace" }}>
                   {Math.round(socialValue).toLocaleString()}đ
+                </div>
+                <div style={{ color: COLORS.textMuted, fontSize: 9, marginTop: 4 }}>
+                  c={Math.round(rawMaterialCost).toLocaleString()} + v={Math.round(v_social).toLocaleString()} + m={Math.round(m_social).toLocaleString()}
                 </div>
               </div>
               <div style={{ background: COLORS.bgAlt, borderRadius: 10, padding: 14, textAlign: "center" }}>
@@ -264,17 +289,26 @@ function MarketSimulation() {
                 <div style={{ color: marketPrice > socialValue ? COLORS.danger : marketPrice < socialValue ? COLORS.equilibrium : COLORS.text, fontSize: 20, fontWeight: 800, fontFamily: "'JetBrains Mono', monospace" }}>
                   {Math.round(marketPrice).toLocaleString()}đ
                 </div>
-              </div>
-              <div style={{ background: COLORS.bgAlt, borderRadius: 10, padding: 14, textAlign: "center" }}>
-                <div style={{ color: COLORS.textMuted, fontSize: 10, marginBottom: 4, fontWeight: 600 }}>CHI PHÍ CÁ BIỆT</div>
-                <div style={{ color: COLORS.purple, fontSize: 20, fontWeight: 800, fontFamily: "'JetBrains Mono', monospace" }}>
-                  {Math.round(individualValue).toLocaleString()}đ
+                <div style={{ color: COLORS.textMuted, fontSize: 9, marginTop: 4 }}>
+                  W × (Cầu/Cung) = W × {supplyDemandRatio.toFixed(2)}
                 </div>
               </div>
               <div style={{ background: COLORS.bgAlt, borderRadius: 10, padding: 14, textAlign: "center" }}>
-                <div style={{ color: COLORS.textMuted, fontSize: 10, marginBottom: 4, fontWeight: 600 }}>LỢI NHUẬN</div>
+                <div style={{ color: COLORS.textMuted, fontSize: 10, marginBottom: 4, fontWeight: 600 }}>CHI PHÍ CÁ BIỆT (k = c+v)</div>
+                <div style={{ color: COLORS.purple, fontSize: 20, fontWeight: 800, fontFamily: "'JetBrains Mono', monospace" }}>
+                  {Math.round(individualCost).toLocaleString()}đ
+                </div>
+                <div style={{ color: COLORS.textMuted, fontSize: 9, marginTop: 4 }}>
+                  c={Math.round(rawMaterialCost).toLocaleString()} + v={Math.round(v_individual).toLocaleString()}
+                </div>
+              </div>
+              <div style={{ background: COLORS.bgAlt, borderRadius: 10, padding: 14, textAlign: "center" }}>
+                <div style={{ color: COLORS.textMuted, fontSize: 10, marginBottom: 4, fontWeight: 600 }}>LỢI NHUẬN (P = Giá cả − k)</div>
                 <div style={{ color: profit >= 0 ? COLORS.equilibrium : COLORS.danger, fontSize: 20, fontWeight: 800, fontFamily: "'JetBrains Mono', monospace" }}>
                   {profit >= 0 ? "+" : ""}{Math.round(profit).toLocaleString()}đ
+                </div>
+                <div style={{ color: COLORS.textMuted, fontSize: 9, marginTop: 4 }}>
+                  m bình quân ± siêu ngạch
                 </div>
               </div>
             </div>
@@ -285,8 +319,10 @@ function MarketSimulation() {
                 {demand > supply && <span>⚡ <strong>Cầu &gt; Cung:</strong> Giá cả <span style={{color: COLORS.danger}}>cao hơn</span> giá trị — Nhà sản xuất có lợi, kích thích mở rộng sản xuất nước sạch. Theo quy luật giá trị của C.Mác, nguồn lực sẽ dịch chuyển vào ngành cấp nước.</span>}
                 {demand < supply && <span>📉 <strong>Cầu &lt; Cung:</strong> Giá cả <span style={{color: COLORS.equilibrium}}>thấp hơn</span> giá trị — Doanh nghiệp cấp nước thua lỗ, buộc phải giảm sản lượng hoặc cải tiến để hạ chi phí.</span>}
                 {demand === supply && <span>⚖️ <strong>Cung = Cầu:</strong> Giá cả <span style={{color: COLORS.gold}}>bằng</span> giá trị — Thị trường nước sạch đạt trạng thái cân bằng. Đây là trạng thái lý tưởng.</span>}
-                {laborTime < sociallyNecessaryLaborTime && <span><br/>✅ Hao phí lao động cá biệt ({laborTime}h) <strong>thấp hơn</strong> TGLĐXHCT ({sociallyNecessaryLaborTime}h) → DN có lợi thế cạnh tranh!</span>}
-                {laborTime > sociallyNecessaryLaborTime && <span><br/>⚠️ Hao phí lao động cá biệt ({laborTime}h) <strong>cao hơn</strong> TGLĐXHCT ({sociallyNecessaryLaborTime}h) → DN đối mặt nguy cơ phá sản!</span>}
+                {laborTime < sociallyNecessaryLaborTime && <span><br/>✅ Hao phí lao động cá biệt ({laborTime}h) <strong>thấp hơn</strong> TGLĐXHCT ({sociallyNecessaryLaborTime}h) → DN thu <strong>lợi nhuận siêu ngạch</strong> (ngoài m bình quân)!</span>}
+                {laborTime === sociallyNecessaryLaborTime && productivity === 100 && <span><br/>⚖️ TGLĐ cá biệt = TGLĐXHCT, NSLĐ trung bình → DN chỉ thu được <strong>m bình quân</strong> ({Math.round(m_social).toLocaleString()}đ), không có siêu ngạch.</span>}
+                {laborTime > sociallyNecessaryLaborTime && <span><br/>⚠️ Hao phí lao động cá biệt ({laborTime}h) <strong>cao hơn</strong> TGLĐXHCT ({sociallyNecessaryLaborTime}h) → DN mất một phần m, nguy cơ thua lỗ nếu chênh quá lớn!</span>}
+                <br/><span style={{fontSize: 11, color: COLORS.textMuted}}>📚 <strong>Công thức C.Mác:</strong> W = c + v + m. Lợi nhuận P = Giá cả bán − k(c+v). Khi DN cải tiến (giảm v) trong khi XH chưa kịp điều chỉnh → P {'>'} m → đó là <em>lợi nhuận siêu ngạch</em>.</span>
               </div>
             </div>
           </Card>
