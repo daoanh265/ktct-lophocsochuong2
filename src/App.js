@@ -922,7 +922,7 @@ export default function App() {
 
   const tabs = [
     { name: "Mô phỏng Thị trường", icon: "📊", component: MarketSimulation },
-    { name: "Vai trò Chủ thể", icon: "🎮", component: RolePlayGame },
+    { name: "Vai trò các Chủ thể", icon: "🎮", component: RolePlayGame },
     { name: "AI Trợ giảng", icon: "🤖", component: AITutor },
     { name: "Kiểm tra", icon: "📝", component: InteractiveQuiz },
   ];
@@ -967,10 +967,10 @@ export default function App() {
                   TRƯỜNG ĐẠI HỌC THỦY LỢI
                 </div>
                 <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: COLORS.text, letterSpacing: "-0.3px", lineHeight: 1.2 }}>
-                  Lớp học số KTCT — Nước & Thủy lợi
+                  Lớp học số KTCT — Mô phỏng thị trường nước sạch
                 </h1>
                 <p style={{ margin: "4px 0 0", fontSize: 12, color: COLORS.textMuted, fontWeight: 500 }}>
-                  Chương 2 · Hàng hóa, Thị trường & Vai trò Chủ thể — Học KTCT qua mô phỏng, role-play & AI
+                  Chương 2 · Hàng hóa, Thị trường & Vai trò của các Chủ thể tham gia thị trường — Học KTCT qua mô phỏng, role-play & AI
                 </p>
               </div>
             </div>
